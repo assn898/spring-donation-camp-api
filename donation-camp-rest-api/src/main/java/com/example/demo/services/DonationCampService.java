@@ -1,11 +1,16 @@
 package com.example.demo.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 
 import com.example.demo.entity.DonationCamp;
 import com.example.demo.entity.DonationCampList;
 import com.example.demo.repos.DonationCampRepository;
 
+@Service
 public class DonationCampService {
 
 	@Autowired
@@ -31,8 +36,15 @@ public class DonationCampService {
 		return campsList;
 	}
 
-	public void deleteCampById(int id) {
-		this.repo.deleteCampById(id);
+	public int deleteCampById(int id) {
+		int campDeleted = 0;
+		campDeleted = this.repo.deleteCampById(id);
+		return campDeleted;
+	}
+
+	public List<String> findAllCampLocations() {
+		
+		return this.repo.findAllCampLocations();
 	}
 	
 	

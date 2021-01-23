@@ -1,12 +1,15 @@
 package com.example.demo.controllers;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,9 +37,17 @@ public class DonationCampController {
 		return this.service.findCampById(id);
 	}
 	
+	@GetMapping(path = "/locations")
+	public List<String> findAllCampLocations(){
+		return this.service.findAllCampLocations();
+	}
+	
 	@GetMapping(path = "/location")
-	public DonationCampList findCampsByLocation(@RequestParam(name = "loc") String location) {
-		return this.service.findCampsByLocation(location);
+	public List<DonationCamp> findCampsByLocation(@RequestParam(name = "loc") String location) {
+		DonationCampList camps = this.service.findCampsByLocation(location);
+		List<DonationCamp> campsList = new ArrayList<>();
+		campsList = camps.getCampsList();
+		return campsList;
 	}
 	
 	@PostMapping(path = "/newCamp")
@@ -44,7 +55,7 @@ public class DonationCampController {
 		return this.service.saveCamp(donationCamp);
 	}
 	
-	@PostMapping(path = "/updateCamp")
+	@PutMapping(path = "/updateCamp")
 	public DonationCamp updateCamp(@RequestParam(name = "campId") int campId, @RequestBody DonationCamp donationCamp) {
 		DonationCamp existingCamp = this.service.findCampById(campId);
 		
@@ -64,8 +75,11 @@ public class DonationCampController {
 	}
 	
 	@DeleteMapping(path = "/deleteCamp")
-	public void deleteDonationCamp(@RequestParam(name = "campId") int id) {
-		this.service.deleteCampById(id);
+	public String deleteDonationCamp(@RequestParam(name = "campId") int id) {
+		int campDeleted = 0;
+		campDeleted = this.service.deleteCampById(id);
+		String isDeleted = Integer.toString(campDeleted);
+		return isDeleted;
 	}
 	
 }
